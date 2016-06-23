@@ -58,6 +58,7 @@ io.on('connection', (socket) => {
 
     result.socket = _id
     result.resultId = uuid.v4()
+    result.createdAt = new Date()
     result.hashedResult = crypto.createHash('md5').update(JSON.stringify(result.data)).digest('hex')
 
     mongoDb.collection('JobsResults').insert(result, (err, result) => {
