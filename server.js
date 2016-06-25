@@ -10,7 +10,7 @@ var app = require('express')()
 
 var config = {
   port: process.env.PORT || 3000,
-  mongoUrl: process.env.MONGO_URL || 'mongodb://localhost:27017/database'
+  mongoUrl: process.env.MONGO_URL || 'mongodb://localhost:27017/aciojs'
 }
 
 MongoClient.connect(config.mongoUrl, (err, db) => {

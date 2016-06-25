@@ -1,7 +1,10 @@
 {
-  "name": "webqueue",
-  "version": "0.0.1",
-  "description": "webqueue app",
+  "name": "acio-js",
+  "version": "0.0.2",
+  "description": "Open source JavaScript distributed computing system",
+  "scripts": {
+    "init": "node server.js"
+  },
   "dependencies": {
     "assert": "1.4.1",
     "express": "4.10.2",
