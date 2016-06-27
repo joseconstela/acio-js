@@ -4,7 +4,7 @@ Acio-JS allows to split JS computing jobs across multiple browsers via it's embe
 
 The library uses web sockets to deliver jobs and collect results, web workers for client-side secure code execution and indexedDB for storage.
 
-Visit [Acio-js website](http://joseconstela.com/acio-js) for more information.
+Visit [Acio-js website](https://joseconstela.github.io/acio-js/) for more information.
 
 <hr>
 
