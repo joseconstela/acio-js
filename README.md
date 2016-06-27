@@ -21,7 +21,7 @@ Install the server packages:
 
 If nececsary, specify your environment variables, as they have default values:
 
-    export PORT=3000
+    export PORT=3001
     export MONGO_URL=mongodb://localhost:27017/database
 
 ## Usage

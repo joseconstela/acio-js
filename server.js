@@ -9,7 +9,7 @@ var app = require('express')()
     assert = require('assert')
 
 var config = {
-  port: process.env.PORT || 3000,
+  port: process.env.PORT || 3001,
   mongoUrl: process.env.MONGO_URL || 'mongodb://localhost:27017/aciojs'
 }
 
