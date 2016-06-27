@@ -1,4 +1,5 @@
-var app = require('express')()
+var express = require('express'),
+    app = express(),
     http = require('http').Server(app)
     io = require('socket.io')(http)
     uuid = require('uuid')
@@ -26,6 +27,8 @@ MongoClient.connect(config.mongoUrl, (err, db) => {
     console.log('listening on *:' + config.port)
   })
 })
+
+app.use('/f', express.static('f'));
 
 emitJob = (socket) => {
   mongoDb.collection('Jobs').findOne({
