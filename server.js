@@ -55,17 +55,16 @@ io.on('connection', (socket) => {
   })
 
   socket.on('result', (result) => {
+
     result.socket = _id
     result.resultId = uuid.v4()
     result.createdAt = new Date()
     result.hashedResult = crypto.createHash('md5').update(JSON.stringify(result.data)).digest('hex')
 
-    mongoDb.collection('JobsResults').insert(result, (err, res) => {
-      if (!err && res) {
+    mongoDb.collection('JobsResults').insert(result, (err, result) => {
+      if (!err && result) {
         if (err) { return false }
-        if (!!result.reqNewJob) {
-          emitJob(socket)
-        }
+        emitJob(socket)
       }
     })
 
