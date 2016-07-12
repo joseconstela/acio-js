@@ -98,18 +98,19 @@ io.on('connection', (socket) => {
     })
   })
 
-  socket.on('result', (result) => {
+  socket.on('result', (jobResult) => {
 
-    result.socket = _id
-    result.resultId = uuid.v4()
-    result.createdAt = new Date()
-    result.hashedResult = crypto.createHash('md5').update(JSON.stringify(result.data)).digest('hex')
+    jobResult.socket = _id
+    jobResult.resultId = uuid.v4()
+    jobResult.createdAt = new Date()
+    jobResult.hashedResult = crypto.createHash('md5').update(JSON.stringify(jobResult.data)).digest('hex')
 
-    mongoDb.collection('JobsResults').insert(result, (err, result) => {
+    mongoDb.collection('JobsResults').insert(jobResult, (err, result) => {
+      console.log('result', result);
       if (!err && result) {
-        // TODO error handling
         if (err) { return false }
-        emitJob(socket)
+        if (!!jobResult.reqNewJob)
+          emitJob(socket)
       }
     })
 
