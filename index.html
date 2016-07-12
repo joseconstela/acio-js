@@ -20,6 +20,9 @@
   </section>
 
   <section class="main-content">
+
+    <a href="index.html">Home</a> - <a href="help.html">Help</a>
+
     <h3>
       <a id="what-is-it" class="anchor" href="#what-is-it" aria-hidden="true">
         <span aria-hidden="true" class="octicon octicon-link"></span>
@@ -39,13 +42,21 @@
       for storage.
     </p>
 
-    <p>Pre-alpha version. Originally made in a 24 hours rush.</p>
+    <div class="screen-captures">
+      <a href="images/jobs.jpg" target="_blank"><img class="screen-captures-item" src="images/jobs.jpg"></a>
+      <a href="images/add_new_job.jpg" target="_blank"><img class="screen-captures-item" src="images/add_new_job.jpg"></a>
+      <a href="images/top_5_job_results.jpg" target="_blank"><img class="screen-captures-item" src="images/top_5_job_results.jpg"></a>
+    </div>
 
     <h3>
       <a id="how-it-works" class="anchor" href="#how-it-works" aria-hidden="true">
         <span aria-hidden="true" class="octicon octicon-link"></span>
       </a>How does it work?
     </h3>
+
+    <p style="font-style:italic;">
+      This documentation applies to current development status.
+    </p>
 
     <h4>
       Components
@@ -57,22 +68,31 @@
       the admin panel.
     </p>
 
-    <br>
-
-    <img src="schema.jpg" alt="Infraestructure schema">
-
     <h4>Library's flow</h4>
 
     <p>
-      When a browser loads the library, configured to point to an specific server address:
+      When a browser loads the library, configured to point to an specific
+      server address:
       <ol>
-        <li>It connects to that jobs server.</li>
+        <li>
+          It connects to the jobs server.
+        </li>
         <li>
           Loads pending jobs from the browser storage system - or asks for a new
           job to the server.
         </li>
-        <li>Performs the job in the browser.</li>
-        <li>Sends the results back to the jobs server.</li>
+        <li>
+          Performs the job in the browser.
+        </li>
+        <li>
+          Sends the results back to the jobs server via
+          <a href="/help.html#library-commands">wqResult</a>
+        </li>
+        <li>
+          Depending on <code>wqResult</code> options, the server can send another
+          job to the client, or the client can be added to an <code>available</code>
+          pool of clients waiting for new jobs.
+        </li></li>
       </ol>
     </p>
 
@@ -115,52 +135,52 @@
     <p>Simple. Just add the following code to the website or web application:</p>
 
     <pre>&lt;script&gt;
-  var worker = new Worker(&#39;/lib.js&#39;);
-  worker.postMessage(&#39;endpoint.http://localhost:3000&#39;);
-  worker.postMessage(&#39;start&#39;);
-&lt;/script&gt;</pre>
+      var worker = new Worker(&#39;/lib.js&#39;);
+      worker.postMessage(&#39;endpoint.http://localhost:3000&#39;);
+      worker.postMessage(&#39;start&#39;);
+      &lt;/script&gt;</pre>
 
-    <h3>
-      <a id="how-to-manage" class="anchor" href="#how-to-manage" aria-hidden="true">
-        <span aria-hidden="true" class="octicon octicon-link"></span>
-      </a>How to manage jobs?
-    </h3>
+      <h3>
+        <a id="how-to-manage" class="anchor" href="#how-to-manage" aria-hidden="true">
+          <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>How to manage jobs?
+      </h3>
 
-    <p>
-      Jobs and results can be managed via <a href="https://github.com/joseconstela/acio-js-panel" target="_blank">acio-js-panel</a>,
-      an administration panel built in MeteorJS. Visit its repository for
-      instructions on how to install.
-    </p>
+      <p>
+        Jobs and results can be managed via <a href="https://github.com/joseconstela/acio-js-panel" target="_blank">acio-js-panel</a>,
+        an administration panel built in MeteorJS. Visit its repository for
+        instructions on how to install.
+      </p>
 
-    <h3>
-      <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
-        <span aria-hidden="true" class="octicon octicon-link"></span>
-      </a>Where can I ready about the topic?
-    </h3>
+      <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+          <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Where can I ready about the topic?
+      </h3>
 
-    <ul>
-      <li><a href="https://www.igvita.com/2009/03/03/collaborative-map-reduce-in-the-browser/">Collaborative Map-Reduce in the Browser</a></li>
-      <li>
-        <a href="https://cs.brown.edu/courses/csci2950-u/f11/papers/mrjs.pdf" target="_blank">
-          MRJS: A JavaScript MapReduce Framework for Web Browse - Sandy Ryza &amp; Tom Wall
-        </a>
-      </li>
-      <li>
-        <a href="https://cs.brown.edu/courses/csci2950-u/f11/resources.html" target="_blank">
-          Data-Intensive Scalable Computing - Brown University Course resources
-        </a>
-      </li>
-    </ul>
+      <ul>
+        <li><a href="https://www.igvita.com/2009/03/03/collaborative-map-reduce-in-the-browser/">Collaborative Map-Reduce in the Browser</a></li>
+        <li>
+          <a href="https://cs.brown.edu/courses/csci2950-u/f11/papers/mrjs.pdf" target="_blank">
+            MRJS: A JavaScript MapReduce Framework for Web Browse - Sandy Ryza &amp; Tom Wall
+          </a>
+        </li>
+        <li>
+          <a href="https://cs.brown.edu/courses/csci2950-u/f11/resources.html" target="_blank">
+            Data-Intensive Scalable Computing - Brown University Course resources
+          </a>
+        </li>
+      </ul>
 
-    <h3>
-      <a id="license" class="anchor" href="#license" aria-hidden="true">
-        <span aria-hidden="true" class="octicon octicon-link"></span>
-      </a>License
-    </h3>
+      <h3>
+        <a id="license" class="anchor" href="#license" aria-hidden="true">
+          <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>License
+      </h3>
 
-    <p>Both acio-js and acio-js-panel, as this page, are licensed under the MIT license:</p>
+      <p>Both acio-js and acio-js-panel, as this page, are licensed under the MIT license:</p>
 
-    <pre>The MIT License (MIT)
+      <pre>The MIT License (MIT)
 
 Copyright (c) 2016 Jose Constela
 
@@ -182,49 +202,49 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</pre>
 
-    <footer class="site-footer">
-      <ol>
-        <li>
-          <a id="cite-boinc"></a>
-          <a href="#">↑</a>
-          Boinc: <a href="https://en.wikipedia.org/wiki/Berkeley_Open_Infrastructure_for_Network_Computing">Berkeley Open Infrastructure for Network Computing</a>
-        </li>
-        <li>
-          <a id="cite-web-sockets"></a>
-          <a href="#">↑</a>
-          WebSockets: <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">Wikipedia</a> -
-          <a href="https://html.spec.whatwg.org/multipage/comms.html#network" target="_blank">WHATWG living standard</a> -
-          <a href="http://socket.io/" target="_blank">Socket.io</a>
-        </li>
-        <li>
-          <a id="cite-web-worker"></a>
-          <a href="#">↑</a>
-          Web Workers:
-          <a href="https://en.wikipedia.org/wiki/Web_worker" target="_blank">Wikipedia</a> -
-          <a href="https://html.spec.whatwg.org/multipage/workers.html" target="_blank">WHATWG living standard</a>
-        </li>
-        <li>
-          <a id="cite-indexeddb"></a>
-          <a href="#">↑</a>
-          indexedDB:
-          <a href="https://www.w3.org/TR/IndexedDB/">W3C Recommendation</a> -
-          <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">IndexedDB API@mozilla</a>
-          * Acio-js uses a disponibility fallback for selecting the storage system to use.
-        </li>
-        <li>
-          <a id="cite-expressjs"></a>
-          <a href="#">↑</a>
-          ExpressJS:
-          <a href="http://expressjs.com/">expressjs.com</a>
-        </li>
-      </ol>
-      <hr>
+        <footer class="site-footer">
+          <ol>
+            <li>
+              <a id="cite-boinc"></a>
+              <a href="#">↑</a>
+              Boinc: <a href="https://en.wikipedia.org/wiki/Berkeley_Open_Infrastructure_for_Network_Computing">Berkeley Open Infrastructure for Network Computing</a>
+            </li>
+            <li>
+              <a id="cite-web-sockets"></a>
+              <a href="#">↑</a>
+              WebSockets: <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">Wikipedia</a> -
+              <a href="https://html.spec.whatwg.org/multipage/comms.html#network" target="_blank">WHATWG living standard</a> -
+              <a href="http://socket.io/" target="_blank">Socket.io</a>
+            </li>
+            <li>
+              <a id="cite-web-worker"></a>
+              <a href="#">↑</a>
+              Web Workers:
+              <a href="https://en.wikipedia.org/wiki/Web_worker" target="_blank">Wikipedia</a> -
+              <a href="https://html.spec.whatwg.org/multipage/workers.html" target="_blank">WHATWG living standard</a>
+            </li>
+            <li>
+              <a id="cite-indexeddb"></a>
+              <a href="#">↑</a>
+              indexedDB:
+              <a href="https://www.w3.org/TR/IndexedDB/">W3C Recommendation</a> -
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">IndexedDB API@mozilla</a>
+              * Acio-js uses a disponibility fallback for selecting the storage system to use.
+            </li>
+            <li>
+              <a id="cite-expressjs"></a>
+              <a href="#">↑</a>
+              ExpressJS:
+              <a href="http://expressjs.com/">expressjs.com</a>
+            </li>
+          </ol>
+          <hr>
 
-      <span class="site-footer-owner"><a href="https://github.com/joseconstela/acio-js">Acio-js</a> is maintained by <a href="https://github.com/joseconstela">joseconstela</a>.</span>
-      <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-    </footer>
+          <span class="site-footer-owner"><a href="https://github.com/joseconstela/acio-js">Acio-js</a> is maintained by <a href="https://github.com/joseconstela">joseconstela</a>.</span>
+          <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+        </footer>
 
-  </section>
+      </section>
 
-</body>
-</html>
+    </body>
+    </html>

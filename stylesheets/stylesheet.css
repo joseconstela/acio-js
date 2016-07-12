@@ -132,6 +132,26 @@ a {
   background-color: #f3f6fa;
   border: solid 1px #dce6f0;
   border-radius: 0.3rem; }
+  .main-content .toc {
+    padding: 0.8rem;
+    margin-top: 20px;
+    margin-bottom: 1rem;
+    color: #567482;
+    word-wrap: normal;
+    background-color: #f3f6fa;
+    border: solid 1px #dce6f0;
+    border-radius: 0.3rem; }
+    .main-content .toc ul {
+      margin: 0 0 0 20px;
+      padding: 0;
+    }
+    .main-content .screen-captures .screen-captures-item {
+      border: solid 1px #dce6f0;
+      background-color: #f3f6fa;
+      border-radius: 0.3rem;
+      display: inline;
+      height: 120px;
+    }
   .main-content pre > code {
     padding: 0;
     margin: 0;

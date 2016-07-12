@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  <title>Acio-js</title>
+  <meta name="description" content="Open source JavaScript distributed computing system">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+</head>
+<body>
+  <section class="page-header">
+    <h1 class="project-name">Acio-js <sup>pre-alpha</sup></h1>
+    <h2 class="project-tagline">Open-source javascript distributed computing.</h2>
+    Jobs server:&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/joseconstela/acio-js" class="btn">acio-js @ GitHub</a>
+    &nbsp;&nbsp;&nbsp;
+    Admin app:<a href="https://github.com/joseconstela/acio-js-panel" class="btn">acio-js-panel @ GitHub</a>
+  </section>
+
+  <section class="main-content">
+
+    <a href="index.html">Home</a> - <a href="help.html">Help</a>
+
+    <br>
+    <div class="toc">
+      <h4>Table of contents</h4>
+      <ul>
+        <li><a href="#library-commands">Available methods inside jobs</a></li>
+      </ul>
+    </div>
+
+    <h3>
+      <a id="library-commands" class="anchor" href="#library-commands" aria-hidden="true">
+        <span aria-hidden="true" class="octicon octicon-link"></span>
+      </a>Available methods inside jobs
+    </h3>
+
+    <table>
+      <tr>
+        <td>wqLog([parameters])</td>
+        <td>
+          Helps jobs debugging by sending a message with <code>parameters</code>
+          to the DOM. See <a href="https://github.com/joseconstela/acio-js-panel/blob/master/client/modules/demo/templates.html#L12-L24" target="_blank">aci-js-panel/demo</a>
+          for an example.
+        </td>
+      </tr>
+      <tr>
+        <td>wqLog([result], {options})</td>
+        <td>
+          <p>Registers the current job result. Options:</p>
+          <table>
+            <tr>
+              <td>
+                reqNewJob
+              </td>
+              <td>
+                boolean
+              </td>
+              <td>
+                If true, once the result is registered, the server will assign a new job.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+
+  </section>
+
+</body>
+</html>
