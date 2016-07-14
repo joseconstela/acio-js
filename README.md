@@ -1,14 +1,14 @@
-# ![acio-js](media/header.jpg)
+# ![Acio.js](media/header.jpg)
 
-Acio-JS allows to split JS computing jobs across multiple browsers via it's embeddable library.
+Acio.js allows to split JS computing jobs across multiple browsers via it's embeddable library.
 
 The library uses web sockets to deliver jobs and collect results, web workers for client-side secure code execution and indexedDB for storage.
 
-Visit [Acio-js website](https://joseconstela.github.io/acio-js/) for more information.
+Visit [Acio.js website](https://joseconstela.github.io/acio-js/) for more information.
 
 <hr>
 
-Remember to visit Acio-js management panel repository: [joseconstela.com/acio-js-panel](http://joseconstela.com/acio-js-panel)
+Remember to visit Acio.js management panel repository: [joseconstela/acio.js-panel](http://joseconstela.com/acio-js-panel)
 
 <hr>
 
