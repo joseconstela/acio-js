@@ -64,22 +64,24 @@ MongoClient.connect(config.mongoUrl, (err, db) => {
 * @param  {[type]} socket [description]
 * @return {[type]}        [description]
 */
-emitJob = (socket) => {
-  mongoDb.collection('Jobs').findOne({
+emitJob = (socket, limit, reason) => {
+  mongoDb.collection('Jobs').find({
     status: 'working'
   }, {
     jobId:1, code:1, type:1
-  }, (err, result) => {
-    if (err) {
-      // TODO error handling
-      console.log('err', err)
-    } else if (result) {
-      socket.leave('available')
-      socket.emit('work', result)
-    } else {
-      socket.join('available')
-      console.log('joined available')
-    }
+  }, {
+    limit: limit
+  }, (err, cursor) => {
+    // TODO error handling
+    if (err) return false;
+
+    cursor.toArray((err, res) => {
+      if(res.length) {
+        socket.emit(reason, res)
+      } else {
+        socket.join('available')
+      }
+    })
   })
 }
 
@@ -106,21 +108,23 @@ io.on('connection', (socket) => {
     jobResult.hashedResult = crypto.createHash('md5').update(JSON.stringify(jobResult.data)).digest('hex')
 
     mongoDb.collection('JobsResults').insert(jobResult, (err, result) => {
-      console.log('result', result);
       if (!err && result) {
         if (err) { return false }
         if (!!jobResult.reqNewJob)
-          emitJob(socket)
+        emitJob(socket, 1, 'newJob')
       }
     })
 
   })
 
+  socket.on('getJobs', (p) => {
+    emitJob(socket, p.limit, 'jobs')
+  });
+
   socket.on('status', (status) => {
+    console.log(status);
     if (status === 'working') {
       socket.leave('available')
-    } else if (status === 'ready') {
-      emitJob(socket)
     }
   })
 
