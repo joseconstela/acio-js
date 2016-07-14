@@ -102,8 +102,8 @@ io.on('connection', (socket) => {
 
   socket.on('result', (jobResult) => {
 
+    jobResult._id = uuid.v4()
     jobResult.socket = _id
-    jobResult.resultId = uuid.v4()
     jobResult.createdAt = new Date()
     jobResult.hashedResult = crypto.createHash('md5').update(JSON.stringify(jobResult.data)).digest('hex')
 
