@@ -8,23 +8,4 @@ Visit [Acio-js website](https://joseconstela.github.io/acio-js/) for more inform
 
 <hr>
 
-Remember to visit Acio-js management panel repository: [joseconstela.com/acio-js-panel](http://joseconstela.com/acio-js-panel)
-
-<hr>
-
-## Installation
-Download and install NodeJS https://nodejs.org/en/download/
-
-Install the server packages:
-
-    npm install
-
-If nececsary, specify your environment variables, as they have default values:
-
-    export PORT=3001
-    export MONGO_URL=mongodb://localhost:27017/database
-
-## Usage
-To launch the jobs server, simple execute:
-
-    npm start
+All documentation has moved to this project's wiki. See [/acio-js/wiki](https://github.com/joseconstela/acio-js/wiki)
