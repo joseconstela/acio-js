@@ -12,34 +12,30 @@
 </head>
 <body>
   <section class="page-header">
-    <h1 class="project-name">Acio-js <sup>pre-alpha</sup></h1>
+    <h1 class="project-name">Acio.js <sup>0.1</sup></h1>
     <h2 class="project-tagline">Open-source javascript distributed computing.</h2>
-    Jobs server:&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/joseconstela/acio-js" class="btn">acio-js @ GitHub</a>
-    &nbsp;&nbsp;&nbsp;
-    Admin app:<a href="https://github.com/joseconstela/acio-js-panel" class="btn">acio-js-panel @ GitHub</a>
+    <a href="https://github.com/joseconstela/acio-js" class="btn">acio-js - jobs server</a>
+    <a href="https://github.com/joseconstela/acio-js-panel" class="btn">acio-js-panel - admin panel</a>
   </section>
 
   <section class="main-content">
 
-    <a href="index.html">Home</a> - <a href="help.html">Help</a>
-
     <h3>
       <a id="what-is-it" class="anchor" href="#what-is-it" aria-hidden="true">
         <span aria-hidden="true" class="octicon octicon-link"></span>
-      </a>What is Acio-js?
+      </a>What is Acio.js?
     </h3>
 
     <p>
-      It's an open source JavaScript distributed computing system - i.e. Boinc
-      <sup><a href="#cite-boinc">[1]</a></sup> for browsers. It allows to split
-      JS computing jobs across multiple browsers via it's embeddable library.
+      It's an open source JavaScript distributed computing system for browsers.
+      It allows run JavaScript tasks across multiple browsers via its library.
     </p>
 
+    <p>The jobs run securely and goes unnoticeable for browser's the final user.</p>
+
     <p>
-      The library uses web sockets <sup><a href="#cite-web-sockets">[2]</a></sup>
-      to deliver jobs and collect results, web workers <sup><a href="#cite-web-workers">[3]</a></sup>
-      for client-side secure code execution and indexedDB <sup><a href="#cite-indexeddb">[4]</a></sup>
-      for storage.
+      Acio.js library can run multiple jobs in multiple processors making the
+      most of each browser captabilities.
     </p>
 
     <div class="screen-captures">
@@ -55,10 +51,6 @@
       </a>How does it work?
     </h3>
 
-    <p style="font-style:italic;">
-      This documentation applies to current development status.
-    </p>
-
     <h4>
       Components
     </h4>
@@ -70,6 +62,13 @@
     </p>
 
     <h4>Library's flow</h4>
+
+    <p>
+      The library uses web sockets <sup><a href="#cite-web-sockets">[1]</a></sup>
+      to deliver jobs and collect results, web workers <sup><a href="#cite-web-workers">[2]</a></sup>
+      for client-side secure code execution and indexedDB <sup><a href="#cite-indexeddb">[3]</a></sup>
+      for storage.
+    </p>
 
     <p>
       When a browser loads the library, configured to point to an specific
@@ -86,14 +85,13 @@
           Performs the job in the browser.
         </li>
         <li>
-          Sends the results back to the jobs server via
-          <a href="/help.html#library-commands">wqResult</a>
+          Sends the results back to the jobs server via <code>result</code>
         </li>
         <li>
-          Depending on <code>wqResult</code> options, the server can send another
+          Depending on <code>result</code> parameters, the server can send another
           job to the client, or the client can be added to an <code>available</code>
           pool of clients waiting for new jobs.
-        </li></li>
+        </li>
       </ol>
     </p>
 
@@ -109,7 +107,7 @@
     </p>
     <p>
       <strong>Jobs server:</strong> It's a NodeJS web server
-      using express<sup><a href="#cite-expressjs">[5]</a></sup>. Available at
+      using express<sup><a href="#cite-expressjs">[4]</a></sup>. Available at
       <a href="https://github.com/joseconstela/acio-js" target="_blank">acio-js repository</a>.
     </p>
     <p>
@@ -124,7 +122,7 @@
     <p>
       <strong>Web Storage:</strong> Acio-js uses a disponibility fallback for
       choosing a storage system. In most cases - as of modern browsers - the
-      solution to use is indexedDB <sup><a href="#cite-indexeddb">[4]</a></sup>.
+      solution to use is indexedDB <sup><a href="#cite-indexeddb">[3]</a></sup>.
     </p>
 
     <h3>
@@ -136,10 +134,10 @@
     <p>Simple. Just add the following code to the website or web application:</p>
 
     <pre>&lt;script&gt;
-      var worker = new Worker(&#39;/lib.js&#39;);
-      worker.postMessage(&#39;endpoint.http://localhost:3000&#39;);
-      worker.postMessage(&#39;start&#39;);
-      &lt;/script&gt;</pre>
+  var worker = new Worker(&#39;/lib.js&#39;);
+  worker.postMessage(&#39;endpoint.http://localhost:3000&#39;);
+  worker.postMessage(&#39;start&#39;);
+&lt;/script&gt;</pre>
 
       <h3>
         <a id="how-to-manage" class="anchor" href="#how-to-manage" aria-hidden="true">
@@ -173,79 +171,43 @@
         </li>
       </ul>
 
-      <h3>
-        <a id="license" class="anchor" href="#license" aria-hidden="true">
-          <span aria-hidden="true" class="octicon octicon-link"></span>
-        </a>License
-      </h3>
+      <footer class="site-footer">
+        <ol>
+          <li>
+            <a id="cite-web-sockets"></a>
+            <a href="#">↑</a>
+            WebSockets: <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">Wikipedia</a> -
+            <a href="https://html.spec.whatwg.org/multipage/comms.html#network" target="_blank">WHATWG living standard</a> -
+            <a href="http://socket.io/" target="_blank">Socket.io</a>
+          </li>
+          <li>
+            <a id="cite-web-worker"></a>
+            <a href="#">↑</a>
+            Web Workers:
+            <a href="https://en.wikipedia.org/wiki/Web_worker" target="_blank">Wikipedia</a> -
+            <a href="https://html.spec.whatwg.org/multipage/workers.html" target="_blank">WHATWG living standard</a>
+          </li>
+          <li>
+            <a id="cite-indexeddb"></a>
+            <a href="#">↑</a>
+            indexedDB:
+            <a href="https://www.w3.org/TR/IndexedDB/">W3C Recommendation</a> -
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">IndexedDB API@mozilla</a>
+            * Acio-js uses a disponibility fallback for selecting the storage system to use.
+          </li>
+          <li>
+            <a id="cite-expressjs"></a>
+            <a href="#">↑</a>
+            ExpressJS:
+            <a href="http://expressjs.com/">expressjs.com</a>
+          </li>
+        </ol>
+        <hr>
 
-      <p>Both acio-js and acio-js-panel, as this page, are licensed under the MIT license:</p>
+        <span class="site-footer-owner"><a href="https://github.com/joseconstela/acio-js">Acio.js</a> - <a href="https://github.com/joseconstela/acio-js/LICENSE">MIT license</a>.</span>
+      </footer>
 
-      <pre>The MIT License (MIT)
+    </section>
 
-Copyright (c) 2016 Jose Constela
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</pre>
-
-        <footer class="site-footer">
-          <ol>
-            <li>
-              <a id="cite-boinc"></a>
-              <a href="#">↑</a>
-              Boinc: <a href="https://en.wikipedia.org/wiki/Berkeley_Open_Infrastructure_for_Network_Computing">Berkeley Open Infrastructure for Network Computing</a>
-            </li>
-            <li>
-              <a id="cite-web-sockets"></a>
-              <a href="#">↑</a>
-              WebSockets: <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">Wikipedia</a> -
-              <a href="https://html.spec.whatwg.org/multipage/comms.html#network" target="_blank">WHATWG living standard</a> -
-              <a href="http://socket.io/" target="_blank">Socket.io</a>
-            </li>
-            <li>
-              <a id="cite-web-worker"></a>
-              <a href="#">↑</a>
-              Web Workers:
-              <a href="https://en.wikipedia.org/wiki/Web_worker" target="_blank">Wikipedia</a> -
-              <a href="https://html.spec.whatwg.org/multipage/workers.html" target="_blank">WHATWG living standard</a>
-            </li>
-            <li>
-              <a id="cite-indexeddb"></a>
-              <a href="#">↑</a>
-              indexedDB:
-              <a href="https://www.w3.org/TR/IndexedDB/">W3C Recommendation</a> -
-              <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API">IndexedDB API@mozilla</a>
-              * Acio-js uses a disponibility fallback for selecting the storage system to use.
-            </li>
-            <li>
-              <a id="cite-expressjs"></a>
-              <a href="#">↑</a>
-              ExpressJS:
-              <a href="http://expressjs.com/">expressjs.com</a>
-            </li>
-          </ol>
-          <hr>
-
-          <span class="site-footer-owner"><a href="https://github.com/joseconstela/acio-js">Acio-js</a> is maintained by <a href="https://github.com/joseconstela">joseconstela</a>.</span>
-          <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-        </footer>
-
-      </section>
-
-    </body>
-    </html>
+  </body>
+  </html>
