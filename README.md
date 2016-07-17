@@ -1,11 +1,13 @@
-# ![acio-js](media/header.jpg)
+# ![acio-js](media/header.png)
 
-Acio-JS allows to split JS computing jobs across multiple browsers via it's embeddable library.
+It's an open source JavaScript distributed computing system for browsers. It allows run JavaScript tasks across multiple browsers via its library.
 
-The library uses web sockets to deliver jobs and collect results, web workers for client-side secure code execution and indexedDB for storage.
+The jobs run securely and goes unnoticeable for browser's the final user.
 
-Visit [Acio-js website](https://joseconstela.github.io/acio-js/) for more information.
+Acio.js library can run multiple jobs in multiple processors making the most of each browser captabilities.
+
+Visit [Acio-js website](https://joseconstela.github.io/acio-js/) for more information 
 
 <hr>
 
-All documentation has moved to this project's wiki. See [/acio-js/wiki](https://github.com/joseconstela/acio-js/wiki)
+All documentation has been moved to this project's wiki. See [/acio-js/wiki](https://github.com/joseconstela/acio-js/wiki)
