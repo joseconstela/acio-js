@@ -25,7 +25,7 @@ MongoClient.connect(config.mongoUrl, (err, db) => {
   mongoDb.createCollection('CappedJobs', {
     capped: true,
     size: 5 * 1048576,
-    max: 2
+    max: 100
   })
 
   http.listen(config.port, () => {
@@ -44,17 +44,23 @@ MongoClient.connect(config.mongoUrl, (err, db) => {
   })
 
   stream.on('data', (result) => {
-    mongoDb.collection('Jobs').findOne({
-      _id: result.jobId,
-      status: 'working'
-    }, {
-      jobId:1, code:1, type:1
-    }, (err, result) => {
-      // TODO error handling
-      if (result) {
-        io.to('available').emit('work', result)
-      }
-    })
+
+    if(result.action === 'working') {
+      mongoDb.collection('Jobs').findOne({
+        _id: result.jobId,
+        status: 'working'
+      }, {
+        jobId:1, code:1, type:1
+      }, (err, result) => {
+        // TODO error handling
+        if (result) {
+          io.to('available').emit('enabledJobs', [result])
+        }
+      })
+    } else {
+      io.to(result.jobId).emit('stop', result._id)
+    }
+
   })
 
 })
@@ -64,11 +70,11 @@ MongoClient.connect(config.mongoUrl, (err, db) => {
 * @param  {[type]} socket [description]
 * @return {[type]}        [description]
 */
-emitJob = (socket, limit, reason) => {
+emitJob = (socket, limit, allowLeaveAval) => {
   mongoDb.collection('Jobs').find({
     status: 'working'
   }, {
-    jobId:1, code:1, type:1
+    code:1, type:1, name:1
   }, {
     limit: limit
   }, (err, cursor) => {
@@ -77,9 +83,28 @@ emitJob = (socket, limit, reason) => {
 
     cursor.toArray((err, res) => {
       if(res.length) {
-        socket.emit(reason, res)
-      } else {
-        socket.join('available')
+        if (socket) {
+
+          res.forEach((r) => {
+            socket.join(r._id)
+          })
+
+          socket.emit('jobs', res)
+
+          if(allowLeaveAval)
+          if (res.length === limit) {
+            console.log('[AVAILABLE] - 1', {asked:limit, got:res.length});
+            socket.leave('available');
+          }
+
+        } else {
+          io.to('available').emit('jobs', result)
+        }
+      }
+
+      if (socket && (!res.length || res.length < limit)) {
+        console.log('[AVAILABLE] + 1', {asked:limit, got:res.length});
+        if (socket) socket.join('available')
       }
     })
   })
@@ -87,23 +112,20 @@ emitJob = (socket, limit, reason) => {
 
 io.on('connection', (socket) => {
 
-  var _id = socket.id.replace('/#', '')
-
   mongoDb.collection('Clients').insert({
-    _id: _id,
+    _id: socket.id,
     handshake: socket.handshake
   })
 
   socket.on('disconnect', () => {
     mongoDb.collection('Clients').remove({
-      _id: _id
+      _id: socket.id
     })
   })
 
   socket.on('result', (jobResult) => {
-
     jobResult._id = uuid.v4()
-    jobResult.socket = _id
+    jobResult.socket = socket.id
     jobResult.createdAt = new Date()
     jobResult.hashedResult = crypto.createHash('md5').update(JSON.stringify(jobResult.data)).digest('hex')
 
@@ -111,21 +133,22 @@ io.on('connection', (socket) => {
       if (!err && result) {
         if (err) { return false }
         if (!!jobResult.reqNewJob)
-        emitJob(socket, 1, 'newJob')
+        emitJob(socket, 1, false)
       }
     })
 
   })
 
-  socket.on('getJobs', (p) => {
-    emitJob(socket, p.limit, 'jobs')
-  });
-
-  socket.on('status', (status) => {
-    console.log(status);
-    if (status === 'working') {
-      socket.leave('available')
-    }
+  socket.on('full', (p) => {
+    socket.leave('available')
   })
+
+  socket.on('workingOn', (jobId) => {
+    socket.join(jobId)
+  })
+
+  socket.on('getJobs', (p) => {
+    emitJob(socket, p.limit, true)
+  });
 
 })
