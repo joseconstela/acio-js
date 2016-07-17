@@ -1,6 +1,6 @@
 # ![acio-js](media/header.png)
 
-It's an open source JavaScript distributed computing system for browsers. It allows run JavaScript tasks across multiple browsers via its library.
+Acio.js is an open source JavaScript distributed computing system for browsers. It allows run JavaScript tasks across multiple browsers via its library.
 
 The jobs run securely and goes unnoticeable for browser's the final user.
 
