@@ -54,11 +54,11 @@ MongoClient.connect(config.mongoUrl, (err, db) => {
       }, (err, result) => {
         // TODO error handling
         if (result) {
-          io.to('available').emit('enabledJobs', [result])
+          io.to('available').emit('jobs', [result])
         }
       })
     } else {
-      io.to(result.jobId).emit('stop', result._id)
+      io.to(result.jobId).emit('stop', result.jobId)
     }
 
   })
@@ -141,6 +141,10 @@ io.on('connection', (socket) => {
 
   socket.on('full', (p) => {
     socket.leave('available')
+  })
+
+  socket.on('available', (p) => {
+    socket.join('available')
   })
 
   socket.on('workingOn', (jobId) => {
