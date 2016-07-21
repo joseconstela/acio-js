@@ -2,11 +2,11 @@
 
 Acio.js is an open source JavaScript distributed computing system for browsers. It allows run JavaScript tasks across multiple browsers via its library.
 
-The jobs run securely and goes unnoticeable for browser's the final user.
+The jobs run securely and goes unnoticeable for the browser's final user.
 
 Acio.js library can run multiple jobs in multiple processors making the most of each browser captabilities.
 
-Visit [Acio-js website](https://joseconstela.github.io/acio-js/) for more information 
+Visit [Acio-js website](https://joseconstela.github.io/acio-js/) for more information
 
 <hr>
 
