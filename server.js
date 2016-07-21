@@ -50,7 +50,7 @@ MongoClient.connect(config.mongoUrl, (err, db) => {
         _id: result.jobId,
         status: 'working'
       }, {
-        jobId:1, code:1, type:1
+        jobId:1, code:1, type:1, libraries: 1
       }, (err, result) => {
         // TODO error handling
         if (result) {
@@ -74,7 +74,7 @@ emitJob = (socket, limit, allowLeaveAval) => {
   mongoDb.collection('Jobs').find({
     status: 'working'
   }, {
-    code:1, type:1, name:1
+    code:1, type:1, name:1, libraries: 1
   }, {
     limit: limit
   }, (err, cursor) => {
