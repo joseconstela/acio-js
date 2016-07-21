@@ -4,8 +4,3 @@ node_js:
 sudo: required
 before_install:
 - npm install -g modulus@next
-deploy:
-  provider: modulus
-  project_name: acio-js
-  api_key:
-    secure: Ki9Hg3X4uErPt/4xVGkeC3LuW+l/rilW8Cw5LLOPzjvHLhOgTVPS1Zu2ubSIAOovZ1kONOG6RjDsWBDmmlvlJQM//i4SAf0NT5ObsWZ2vZSvINlsBbSKQwwnsRzs2CCiYQupwqihsQnpnFyUw5tjscbkaAsP885/v8YiXnAOVGhcvkbvSGT6SsPdW2ygmgsAXcCYk3gG9M4j3xVB7hKfsax5hw+Bh3c9Sad+GvuqcZ3oHuLR4lpWTUwWtyX3bUgobdPHVLkHs/qWIqHyQtMz8Qt8bFC5OVxrHYeyaWMcLxe4Hg1i+BkUIH7YbL6axlsvJgnfO9hk+Tjn30SXDVZ+Y9VDCC+2hKHUr2f9j8fFYORxwCaE93R6LIud21IgmotWHUFCoEOZgy7XAF9Yl0Lbapx+ewe7Y/9LEfj7cJMW9jlfWPuqCe1YC75/ff8MbUNnSx/KDv2m1BmNUaxuAjWGOP+TdfTNZWn9zAMp/R8u6ECALj/FCd/EpylmjR+rlEic9fYZPuvQz+J2EzILHy+9yTB2cT8p2YiybGEGA7/z/dkmgplo9LWacH5cfS1mFJw7EYiO1Ph6YaaCQc9DTguwV1AhVnlwCrqiU5aLxTK4gjQpLyHAFaSWnHnLD9cnRTmEAesARU9h1+9ImNwTZfmhFai4ld0SSMZhHxLXLGJwOSM=
