@@ -6,7 +6,7 @@ let settings = {
   mongodb: {
     $filter: 'env',
     development: {
-      url: 'mongodb://localhost:27017/aciojs'
+      url: 'mongodb://localhost:3001/meteor'
     },
     production: {
       url: 'mongodb://localhost:27017/aciojs'
@@ -18,13 +18,13 @@ let settings = {
   server: {
     $filter: 'env',
     development: {
-      port: process.env.PORT || 3000
+      port: 8000
     },
     production: {
-      port: process.env.PORT || 3000
+      port: 8000
     },
     $default: {
-      port: process.env.PORT || 3000
+      port: 8000
     }
   }
 }
