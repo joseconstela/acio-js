@@ -38,8 +38,7 @@ module.exports.get = (dbs, opts, _cb) => {
  */
 module.exports.findOne = (dbs, opts, _cb) => {
 
-  dbs.mongo.collection(collectionName).findOne(opts.query, opts.proj, () => {
-    console.log(arguments);
+  dbs.mongo.collection(collectionName).findOne(opts.query, opts.proj, (err, result) => {
     _cb(err, result)
   })
 
