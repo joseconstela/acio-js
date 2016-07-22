@@ -1,41 +1,30 @@
+"use strict";
+
 var app = require('express')(),
-http = require('http').Server(app)
-io = require('socket.io')(http)
-uuid = require('uuid')
-crypto = require('crypto')
+    http = require('http').Server(app),
+    io = require('socket.io')(http),
+    assert = require('assert'),
+    mongoClient = require('mongodb').MongoClient,
+    mongoConfig = require('./config').get('/mongodb'),
+    serverConfig = require('./config').get('/server'),
 
-MongoClient = require('mongodb').MongoClient
-mongoDb = null
-assert = require('assert')
+    db = require('./db/_db'),
+    libraries = require('./libraries/_libraries'),
 
-var config = {
-  port: process.env.PORT || 3001,
-  mongoUrl: process.env.MONGO_URL || 'mongodb://localhost:27017/aciojs'
-}
+    dbs = { mongo: null }
 
-MongoClient.connect(config.mongoUrl, (err, db) => {
+mongoClient.connect(mongoConfig.url, (err, result) => {
   assert.equal(null, err)
-  mongoDb = db
+  dbs.mongo = result
 
-  if (process.env.NODE_ENV === 'development') {
-    mongoDb.collection('Clients').drop()
-    mongoDb.collection('JobsResults').drop()
-  }
+  // DB requirements
+  db.startup(dbs)
 
-  mongoDb.createCollection('CappedJobs', {
-    capped: true,
-    size: 5 * 1048576,
-    max: 100
+  http.listen(serverConfig.port, () => {
+    console.log('listening on *:' + serverConfig.port)
   })
 
-  http.listen(config.port, () => {
-    console.log('listening on *:' + config.port)
-  })
-
-  stream = mongoDb.collection('CappedJobs').find({}, {
-    tailable: true,
-    awaitData: true
-  }).stream()
+  let stream = db.cappedJobs.stream(dbs)
 
   stream.on('error', (e) => {
     // TODO error handling
@@ -46,17 +35,19 @@ MongoClient.connect(config.mongoUrl, (err, db) => {
   stream.on('data', (result) => {
 
     if(result.action === 'working') {
-      mongoDb.collection('Jobs').findOne({
-        _id: result.jobId,
-        status: 'working'
-      }, {
-        jobId:1, code:1, type:1, libraries: 1
-      }, (err, result) => {
+
+      var queryOpts = {
+        query: {_id: result.jobId, status: 'working'},
+        proj: {code:1, type:1, name:1, libraries: 1}
+      }
+
+      db.jobs.findOne(dbs, queryOpts, (err, result) => {
         // TODO error handling
         if (result) {
           io.to('available').emit('jobs', [result])
         }
       })
+
     } else {
       io.to(result.jobId).emit('stop', result.jobId)
     }
@@ -65,75 +56,32 @@ MongoClient.connect(config.mongoUrl, (err, db) => {
 
 })
 
-/**
-* emitJob
-* @param  {[type]} socket [description]
-* @return {[type]}        [description]
-*/
-emitJob = (socket, limit, allowLeaveAval) => {
-  mongoDb.collection('Jobs').find({
-    status: 'working'
-  }, {
-    code:1, type:1, name:1, libraries: 1
-  }, {
-    limit: limit
-  }, (err, cursor) => {
-    // TODO error handling
-    if (err) return false;
-
-    cursor.toArray((err, res) => {
-      if(res.length) {
-        if (socket) {
-
-          res.forEach((r) => {
-            socket.join(r._id)
-          })
-
-          socket.emit('jobs', res)
-
-          if(allowLeaveAval)
-          if (res.length === limit) {
-            console.log('[AVAILABLE] - 1', {asked:limit, got:res.length});
-            socket.leave('available');
-          }
-
-        } else {
-          io.to('available').emit('jobs', result)
-        }
-      }
-
-      if (socket && (!res.length || res.length < limit)) {
-        console.log('[AVAILABLE] + 1', {asked:limit, got:res.length});
-        if (socket) socket.join('available')
-      }
-    })
-  })
-}
-
 io.on('connection', (socket) => {
 
-  mongoDb.collection('Clients').insert({
+  db.clients.insert(dbs, {
     _id: socket.id,
     handshake: socket.handshake
-  })
+  }, () => {})
 
   socket.on('disconnect', () => {
-    mongoDb.collection('Clients').remove({
+    db.clients.remove(dbs, {
       _id: socket.id
-    })
+    }, () => {})
   })
 
-  socket.on('result', (jobResult) => {
-    jobResult._id = uuid.v4()
-    jobResult.socket = socket.id
-    jobResult.createdAt = new Date()
-    jobResult.hashedResult = crypto.createHash('md5').update(JSON.stringify(jobResult.data)).digest('hex')
+  socket.on('error', () => {
+    console.log(arguments)
+  })
 
-    mongoDb.collection('JobsResults').insert(jobResult, (err, result) => {
-      if (!err && result) {
+  socket.on('result', (data) => {
+
+    data.socket = socket.id
+
+    db.jobsResults.new(dbs, data, (error, result) => {
+      if (!error && result) {
         if (err) { return false }
-        if (!!jobResult.reqNewJob)
-        emitJob(socket, 1, false)
+        if (!data.reqNewJob) { return false }
+        libraries.jobs.emitJob(dbs, io, socket, 1, false, () => {})
       }
     })
 
@@ -152,7 +100,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('getJobs', (p) => {
-    emitJob(socket, p.limit, true)
+    libraries.jobs.emitJob(dbs, io, socket, p.limit, true, () => {})
   });
 
 })
