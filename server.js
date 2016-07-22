@@ -9,20 +9,23 @@ var app = require('express')(),
     serverConfig = require('./config').get('/server'),
 
     db = require('./db/_db'),
-    libraries = require('./libraries/_libraries'),
+    jobsTools = require('./libraries/jobs'),
 
     dbs = { mongo: null }
 
-mongoClient.connect(mongoConfig.url, (err, result) => {
+mongoClient.connect(process.env.MONGO_URL || mongoConfig.url, (err, result) => {
   assert.equal(null, err)
   dbs.mongo = result
 
   // DB requirements
   db.startup(dbs)
 
-  http.listen(serverConfig.port, () => {
-    console.log('listening on *:' + serverConfig.port)
+  http.listen(process.env.PORT || serverConfig.port, () => {
+    console.log('listening on *:' + (process.env.PORT || serverConfig.port))
   })
+
+  var api = require('./routes/api')(dbs);
+  app.use('/api', api);
 
   let stream = db.cappedJobs.stream(dbs)
 
@@ -79,9 +82,9 @@ io.on('connection', (socket) => {
 
     db.jobsResults.new(dbs, data, (error, result) => {
       if (!error && result) {
-        if (err) { return false }
+        if (error) { return false }
         if (!data.reqNewJob) { return false }
-        libraries.jobs.emitJob(dbs, io, socket, 1, false, () => {})
+        jobsTools.emitJob(dbs, io, socket, 1, false, () => {})
       }
     })
 
@@ -100,7 +103,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('getJobs', (p) => {
-    libraries.jobs.emitJob(dbs, io, socket, p.limit, true, () => {})
+    jobsTools.emitJob(dbs, io, socket, p.limit, true, () => {})
   });
 
 })
