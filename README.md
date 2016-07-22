@@ -1,4 +1,4 @@
-# ![acio-js](https://github.com/joseconstela/acio-js/raw/master/media/header.png)
+# ![acio-js](https://joseconstela.github.io/acio-js/images/header.png)
 
 Acio.js is an open source JavaScript distributed computing system for browsers. It allows run JavaScript tasks across multiple browsers via its library.
 
