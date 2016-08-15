@@ -9,19 +9,25 @@ var app = require('express')(),
     serverConfig = require('./config').get('/server'),
 
     db = require('./db/_db'),
+    debug = require('./libraries/debug'),
     jobsTools = require('./libraries/jobs'),
 
     dbs = { mongo: null }
 
+debug.title('Acio-js')
+
 mongoClient.connect(process.env.MONGO_URL || mongoConfig.url, (err, result) => {
   assert.equal(null, err)
+
+  debug.success(`MongoDB connected to ${process.env.MONGO_URL}`)
+
   dbs.mongo = result
 
   // DB requirements
   db.startup(dbs)
 
   http.listen(process.env.PORT || serverConfig.port, () => {
-    console.log('listening on *:' + (process.env.PORT || serverConfig.port))
+    debug.info('listening on *:' + (process.env.PORT || serverConfig.port))
   })
 
   var api = require('./routes/api')(dbs);
@@ -31,24 +37,19 @@ mongoClient.connect(process.env.MONGO_URL || mongoConfig.url, (err, result) => 
 
   stream.on('error', (e) => {
     // TODO error handling
-    // TODO prevent empty capped collection stopping streams
-    console.log('Tailable cursor error', e);
+    debug.error('Tailable cursor error');
   })
 
   stream.on('data', (result) => {
 
     if(result.action === 'working') {
 
-      var queryOpts = {
-        query: {_id: result.jobId, status: 'working'},
-        proj: {code:1, type:1, name:1, libraries: 1}
-      }
+      // Sends the job to clients in available queue
+      jobsTools.emitJobAvailables(dbs, {
+        _id: result.jobId,
+        status: 'working'
+      }, io, 1, false, (error, result) => {
 
-      db.jobs.findOne(dbs, queryOpts, (err, result) => {
-        // TODO error handling
-        if (result) {
-          io.to('available').emit('jobs', [result])
-        }
       })
 
     } else {
@@ -62,18 +63,23 @@ mongoClient.connect(process.env.MONGO_URL || mongoConfig.url, (err, result) => 
 io.on('connection', (socket) => {
 
   db.clients.insert(dbs, {
-    _id: socket.id,
-    handshake: socket.handshake
+    _id: socket.id
   }, () => {})
 
   socket.on('disconnect', () => {
+
+    db.hash.remove(dbs, {
+      socket: socket.id
+    }, () => {})
+
     db.clients.remove(dbs, {
       _id: socket.id
     }, () => {})
+
   })
 
-  socket.on('error', () => {
-    console.log(arguments)
+  socket.on('error', (err) => {
+    debug.error('Socket error', err)
   })
 
   socket.on('result', (data) => {
@@ -84,7 +90,8 @@ io.on('connection', (socket) => {
       if (!error && result) {
         if (error) { return false }
         if (!data.reqNewJob) { return false }
-        jobsTools.emitJob(dbs, io, socket, 1, false, () => {})
+
+        jobsTools.emitJob(dbs, 'null', io, socket, 1, false, () => {})
       }
     })
 
@@ -103,7 +110,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('getJobs', (p) => {
-    jobsTools.emitJob(dbs, io, socket, p.limit, true, () => {})
+    jobsTools.emitJob(dbs, null, io, socket, p.limit, true, () => {})
   });
 
 })

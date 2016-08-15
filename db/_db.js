@@ -4,6 +4,7 @@ module.exports.jobs = require('./jobs')
 module.exports.clients = require('./clients')
 module.exports.cappedJobs = require('./cappedJobs')
 module.exports.jobsResults = require('./jobsResults')
+module.exports.hash = require('./hash')
 
 /**
  * [description]

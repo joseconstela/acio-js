@@ -1,10 +1,20 @@
 "use strict"
 
-var db = require('../db/_db')
+const db = require('../db/_db'),
+      defaultQuery = {status: 'working'},
+      projection = {
+    	    name: "$name",
+    	    code: "$template.code",
+    	    libraries: "$template.libraries",
+    	    env: "$env",
+    	    parameter: "$collection.parameters"
+
+    	}
 
 /**
  * [description]
  * @param  {[type]} dbs            [description]
+ * @param  {Object} query          Mongo's query against jobs collection
  * @param  {[type]} io             [description]
  * @param  {[type]} socket         [description]
  * @param  {[type]} limit          [description]
@@ -12,17 +22,22 @@ var db = require('../db/_db')
  * @param  {[type]} _cb            [description]
  * @return {[type]}                [description]
  */
-module.exports.emitJob = (dbs, io, socket, limit, allowLeaveAval, _cb) => {
+module.exports.emitJob = (dbs, query, io, socket, limit, allowLeaveAval, _cb) => {
 
-  let queryOpts = {
-    query: {status: 'working'},
-    proj: {code:1, type:1, name:1, libraries: 1},
-    opts: {limit: limit},
-    transform: ['array']
-  }
-
-  db.jobs.get(dbs, queryOpts, (err, result) => {
-    if (err) return _cb(err, null)
+  dbs.mongo.collection('Jobs').aggregate([
+  	{
+      $match: query || defaultQuery
+    },
+    {
+      $limit: limit
+    },
+    {
+      $project: projection
+    }
+  ], (error, result) => {
+    if (error) {
+      return _cb(error, null)
+    }
 
     if(result.length) {
       if (socket) {
@@ -48,8 +63,32 @@ module.exports.emitJob = (dbs, io, socket, limit, allowLeaveAval, _cb) => {
       if (socket) socket.join('available')
     }
 
-    _cb(err, null);
-
+    _cb(error, null);
   })
+
+}
+
+module.exports.emitJobAvailables = (dbs, query, io, limit, allowLeaveAval, _cb) => {
+
+  /*
+  let queryOpts = {
+    query: query || defaultQuery,
+    proj: projectFields,
+    opts: {limit: limit},
+    transform: ['array']
+  }
+
+  db.jobs.get(dbs, queryOpts, (err, result) => {
+    if (err) {
+      return _cb(err, null)
+    }
+
+    if (result) {
+      io.to('available').emit('jobs', [result])
+    }
+
+    _cb(err, null);
+  })
+  */
 
 }
