@@ -86,7 +86,7 @@ io.on('connection', (socket) => {
 
     data.socket = socket.id
 
-    db.jobsResults.new(dbs, data, (error, result) => {
+    db.jobsResults.insert(dbs, data, (error, result) => {
       if (!error && result) {
         if (error) { return false }
         if (!data.reqNewJob) { return false }

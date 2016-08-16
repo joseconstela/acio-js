@@ -16,7 +16,7 @@ var collectionName = 'JobsResults'
  * @param  {[type]} _cb [description]
  * @return {[type]}     [description]
  */
-module.exports.new = (dbs, doc, _cb) => {
+module.exports.insert = (dbs, doc, _cb) => {
 
   doc._id = uuid.v4()
   doc.createdAt = new Date()
