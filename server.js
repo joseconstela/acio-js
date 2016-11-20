@@ -19,7 +19,7 @@ debug.title('Acio-js')
 mongoClient.connect(process.env.MONGO_URL || mongoConfig.url, (err, result) => {
   assert.equal(null, err)
 
-  debug.success(`MongoDB connected to ${process.env.MONGO_URL}`)
+  debug.success(`MongoDB connected to ${process.env.MONGO_URL || mongoConfig.url}`)
 
   dbs.mongo = result
 
@@ -49,7 +49,7 @@ mongoClient.connect(process.env.MONGO_URL || mongoConfig.url, (err, result) => 
         _id: result.jobId,
         status: 'working'
       }, io, 1, false, (error, result) => {
-
+        
       })
 
     } else {
