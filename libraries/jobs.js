@@ -24,9 +24,15 @@ const db = require('../db/_db'),
  */
 module.exports.emitJob = (dbs, query, io, socket, limit, allowLeaveAval, _cb) => {
 
+  let dbQuery = query || defaultQuery;
+
+  if (socket) {
+    dbQuery._id = { $nin: Object.keys(socket.rooms).splice(1) }
+  }
+
   dbs.mongo.collection('Jobs').aggregate([
   	{
-      $match: query || defaultQuery
+      $match: dbQuery
     },
     {
       $limit: limit
@@ -70,10 +76,9 @@ module.exports.emitJob = (dbs, query, io, socket, limit, allowLeaveAval, _cb) =>
 
 module.exports.emitJobAvailables = (dbs, query, io, limit, allowLeaveAval, _cb) => {
 
-  /*
   let queryOpts = {
     query: query || defaultQuery,
-    proj: projectFields,
+    //proj: projectFields,
     opts: {limit: limit},
     transform: ['array']
   }
@@ -84,11 +89,10 @@ module.exports.emitJobAvailables = (dbs, query, io, limit, allowLeaveAval, _cb) 
     }
 
     if (result) {
-      io.to('available').emit('jobs', [result])
+      io.to('available').emit('jobs', result)
     }
 
     _cb(err, null);
   })
-  */
 
 }
