@@ -1,4 +1,6 @@
-"use strict"
+'use strict'
+
+const _ = require('lodash')
 
 /**
 * [collectionName description]
@@ -15,12 +17,20 @@ var collectionName = 'Jobs'
 */
 module.exports.get = (dbs, opts, _cb) => {
 
-  dbs.mongo.collection(collectionName).find(opts.query, opts.proj, opts.opts, (err, cursor) => {
+  dbs.mongo.collection(collectionName).find(opts.query || {}, opts.fields || {}, opts.opts || {}, (err, cursor) => {
     if (err) return _cb(err, cursor)
 
-    if (opts.transform.indexOf('array') > -1) {
+    if (!!opts.transform && opts.transform.indexOf('array') > -1) {
       cursor.toArray((err, res) => {
-        _cb(err, res)
+        _cb(err, _.map(res, (r) => {
+          return {
+            _id: r._id,
+            name: r.name,
+            code: r.template.code,
+            libraries: r.template.libraries,
+            parameter: r.collection.parameters
+          }
+        }))
       })
     } else {
       _cb(err, cursor)
@@ -36,9 +46,9 @@ module.exports.get = (dbs, opts, _cb) => {
  * @param  {[type]} _cb  [description]
  * @return {[type]}      [description]
  */
-module.exports.findOne = (dbs, opts, _cb) => {
+module.exports.getOne = (dbs, opts, _cb) => {
 
-  dbs.mongo.collection(collectionName).findOne(opts.query, opts.proj, (err, result) => {
+  dbs.mongo.collection(collectionName).findOne(opts.query || {}, opts.fields || {}, (err, result) => {
     _cb(err, result)
   })
 

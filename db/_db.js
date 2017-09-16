@@ -22,7 +22,7 @@ module.exports.connect = (_cb) => {
  * @param  {[type]} dbs [description]
  * @return {[type]}     [description]
  */
-module.exports.startup = (dbs) => {
+module.exports.startup = (dbs, cb) => {
   if (process.env.NODE_ENV === 'development') {
     dbs.mongo.collection('Clients').drop()
     dbs.mongo.collection('JobsResults').drop()
@@ -32,5 +32,7 @@ module.exports.startup = (dbs) => {
     capped: true,
     size: 5 * 1048576,
     max: 100
+  }, (error, result) => {
+    cb(error, result);
   })
 }
