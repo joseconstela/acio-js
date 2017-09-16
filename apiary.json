@@ -1,0 +1,150 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Acio-js
+
+Polls is a simple API allowing consumers to view polls and vote in them.
+
+## Jobs Item [/jobs/id]
+
+### Retrieve A Job [GET]
+
++ Response 200 (application/json)
+
+        {
+          "_id": "LrFqCDoiAwXcx8j43",
+          "name": "t1",
+          "description": "t1",
+          "env": [
+            {
+              "key": "k1",
+              "value": "v1"
+            }
+          ],
+          "template": {
+            "_id": "Q9kz2Sz66Z6bEcsHy",
+            "name": "My template",
+            "libraries": [
+              "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"
+            ],
+            "code": "setInterval(function() {result(_.VERSION, {reqNewJob:false} );}, 10)",
+            "createdAt": "2016-11-20T16:00:31.000Z"
+          },
+          "collection": {
+            "_id": "ZCXR9oH7hE2Ko7gYs",
+            "name": "my colelction",
+            "parameters": [
+              "source1",
+              "source2",
+              "source3"
+            ],
+            "notes": "lol",
+            "createdAt": "2016-11-20T16:00:48.000Z"
+          },
+          "status": "working",
+          "createdAt": "2016-11-20T16:06:31.313Z"
+        }
+
+## Jobs Collection [/jobs]
+
+### List All Jobs [GET]
+
++ Response 200 (application/json)
+
+        {
+          "data": [
+            {
+              "_id": "LrFqCDoiAwXcx8j43",
+              "name": "t1",
+              "description": "t1",
+              "env": [
+                {
+                  "key": "k1",
+                  "value": "v1"
+                }
+              ],
+              "template": {
+                "_id": "Q9kz2Sz66Z6bEcsHy",
+                "name": "My template",
+                "libraries": [
+                  "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"
+                ],
+                "code": "setInterval(function() {result(_.VERSION, {reqNewJob:false} );}, 10)",
+                "createdAt": "2016-11-20T16:00:31.000Z"
+              },
+              "collection": {
+                "_id": "ZCXR9oH7hE2Ko7gYs",
+                "name": "my colelction",
+                "parameters": [
+                  "source1",
+                  "source2",
+                  "source3"
+                ],
+                "notes": "lol",
+                "createdAt": "2016-11-20T16:00:48.000Z"
+              },
+              "status": "working",
+              "createdAt": "2016-11-20T16:06:31.313Z"
+            }
+          ],
+          "totalCount": 1
+        }
+
+### Create a New Job [POST]
+
+You may create your own job using this action. It takes a JSON
+object containing the job settings
+
++ Request (application/json)
+
+        {
+            "name": "My JOB Name",
+            "description": "My job description",
+            "env": [
+                { key: "ENV", value: "production" }
+            ],
+            "template": "template id"
+            "collection": "collection id"
+        }
+
++ Response 201 (application/json)
+
+    + Headers
+
+            Location: /jobs/LrFqCDoiAwXcx8j43
+
+    + Body
+
+            {
+              "_id": "LrFqCDoiAwXcx8j43",
+              "name": "My JOB Name",
+              "description": "My job description",
+              "env": [
+                {
+                  "key": "ENV",
+                  "value": "production"
+                }
+              ],
+              "template": {
+                "_id": "Q9kz2Sz66Z6bEcsHy",
+                "name": "My template",
+                "libraries": [
+                  "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"
+                ],
+                "code": "result(_.VERSION, {reqNewJob:false} );}",
+                "createdAt": "2016-11-20T16:00:31.000Z"
+              },
+              "collection": {
+                "_id": "ZCXR9oH7hE2Ko7gYs",
+                "name": "my colelction",
+                "parameters": [
+                  "source1",
+                  "source2",
+                  "source3"
+                ],
+                "notes": "lol",
+                "createdAt": "2016-11-20T16:00:48.000Z"
+              },
+              "status": "working",
+              "createdAt": "2016-11-20T16:06:31.313Z"
+            }
