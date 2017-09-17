@@ -1,0 +1,62 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+entries:
+- title: sidebar
+  folders:
+
+  - title: Overview
+    output: web
+    folderitems:
+
+    - title: Get started
+      url: /getstarted.html
+      output: web
+      type: homepage
+
+    - title: Introduction
+      url: /index.html
+      output: web
+
+  - title: Jobs server
+    output: web
+    folderitems:
+
+    - title: Overview
+      url: /jobsserver-overview.html
+      output: web
+
+  - title: Management panel
+    output: web
+    folderitems:
+
+    - title: Overview
+      url: /managementpanel-overview.html
+      output: web
+
+    - title: Templates
+      url: /managementpanel-templates.html
+      output: web
+
+    - title: Functions
+      url: /managementpanel-functions.html
+      output: web
+
+    - title: Data sources
+      url: /managementpanel-datasources.html
+      output: web
+
+    - title: Jobs
+      url: /managementpanel-jobs.html
+      output: web
+
+  - title: Clients
+    output: web
+    folderitems:
+
+    - title: Overview
+      url: /clients-overview.html
+      output: web
+
+    - title: Javascript
+      url: /clients-javascript.html
+      output: web
