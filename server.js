@@ -15,18 +15,19 @@ const db = require('./db/_db');
 const debug = require('debug')('acio');
 const jobsTools = require('./libraries/jobs');
 
-let dbs = {
-  mongo: null
-};
+let dbs = { mongo: null };
 
 debug('Acio-js'.blue);
 
 require('async').waterfall([
 
   function connectDb(cb) {
+    debug('Connecting to DB...'.blue);
+    const attemps = 30;
+    let attempsLeft = attemps;
     let connect = (_cb) => {
-      debug('Connecting to DB...'.blue);
-
+      debug(`  retry ${attempsLeft} of ${attemps}`.yellow);
+      attempsLeft--;
       mongoClient.connect(process.env.MONGO_URL ||  mongoConfig.url, (error, result) => {
         if (error) { return _cb(error, result); }
         debug(`  connected to ${process.env.MONGO_URL || mongoConfig.url}`.green);
@@ -35,7 +36,7 @@ require('async').waterfall([
       });
     };
 
-    async.retry({times: 10, interval: 1000}, connect, function(error, result) {
+    async.retry({times: attemps, interval: 300}, connect, function(error, result) {
       cb(error, result);
     });
   },
