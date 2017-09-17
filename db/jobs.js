@@ -26,9 +26,9 @@ module.exports.get = (dbs, opts, _cb) => {
           return {
             _id: r._id,
             name: r.name,
-            code: r.template.code,
-            libraries: r.template.libraries,
-            parameter: r.collection.parameters
+            code: r.function.code,
+            libraries: r.function.libraries,
+            parameter: r.data.parameters
           }
         }))
       })

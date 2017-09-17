@@ -4,10 +4,10 @@ const db = require('../db/_db'),
       defaultQuery = {status: 'working'},
       projection = {
     	    name: "$name",
-    	    code: "$template.code",
-    	    libraries: "$template.libraries",
+    	    code: "$function.code",
+    	    libraries: "$function.libraries",
     	    env: "$env",
-    	    parameter: "$collection.parameters"
+    	    parameter: "$data.parameters"
 
     	}
 
