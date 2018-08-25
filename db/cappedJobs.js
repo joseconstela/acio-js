@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const async = require('async');
-let collection = 'CappedJobs'
+const collection = 'CappedJobs'
 
 module.exports.stream = (dbs) => {
   return dbs.mongo.collection(collection).find({}, {

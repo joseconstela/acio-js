@@ -1,13 +1,13 @@
 "use strict"
 
-var uuid = require('uuid'),
-    crypto = require('crypto')
+const uuid = require('uuid')
+const crypto = require('crypto')
 
 /**
  * [collectionName description]
  * @type {String}
  */
-var collectionName = 'JobsResults'
+const collectionName = 'JobsResults'
 
 /**
  * [description]
@@ -17,7 +17,7 @@ var collectionName = 'JobsResults'
  * @return {[type]}     [description]
  */
 module.exports.insert = (dbs, doc, _cb) => {
-
+  
   doc._id = uuid.v4()
   doc.createdAt = new Date()
   doc.hashedResult = crypto.createHash('md5').update(JSON.stringify(doc.data)).digest('hex')

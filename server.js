@@ -1,36 +1,35 @@
-'use strict';
+'use strict'
 
-const async = require('async');
-const colors = require('colors');
-const app = require('express')();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-const assert = require('assert');
-const mongoClient = require('mongodb').MongoClient;
-const MongoOplog = require('mongo-oplog');
-const mongoConfig = require('./config').get('/mongodb');
-const serverConfig = require('./config').get('/server');
+const async = require('async')
+const app = require('express')()
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
+const assert = require('assert')
+const mongoClient = require('mongodb').MongoClient
+const MongoOplog = require('mongo-oplog')
+const mongoConfig = require('./config').get('/mongodb')
+const serverConfig = require('./config').get('/server')
 
-const db = require('./db/_db');
-const debug = require('debug')('acio');
-const jobsTools = require('./libraries/jobs');
+const db = require('./db/_db')
+const debug = require('debug')('acio')
+const jobsTools = require('./libraries/jobs')
 
 let dbs = { mongo: null };
 
-debug('Acio-js'.blue);
+debug('Acio-js');
 
 require('async').waterfall([
 
   function connectDb(cb) {
-    debug('Connecting to DB...'.blue);
+    debug('Connecting to DB...');
     const attemps = 30;
     let attempsLeft = attemps;
     let connect = (_cb) => {
-      debug(`  retry ${attempsLeft} of ${attemps}`.yellow);
+      debug(`  retry ${attempsLeft} of ${attemps}`);
       attempsLeft--;
       mongoClient.connect(process.env.MONGO_URL ||  mongoConfig.url, (error, result) => {
         if (error) { return _cb(error, result); }
-        debug(`  connected to ${process.env.MONGO_URL || mongoConfig.url}`.green);
+        debug(`  connected to ${process.env.MONGO_URL || mongoConfig.url}`);
         dbs.mongo = result;
         _cb(null, null)
       });
@@ -42,34 +41,34 @@ require('async').waterfall([
   },
 
   function prepateCappedCollection(result, cb) {
-    debug('Preparing DB...'.blue);
+    debug('Preparing DB...');
 
     db.startup(dbs, (error, result) => {
       if (error) { return cb(error, result); }
-      debug('  Startup complete'.green)
+      debug('  Startup complete')
       db.cappedJobs.restart(dbs, (error, result) => {
         if (error) { return cb(error, result); }
-        debug('  Capped collection restarted'.green)
+        debug('  Capped collection restarted')
         cb(error, result);
       });
     });
   },
 
   function startServer(result, cb) {
-    debug('Start server'.blue);
+    debug('Start server');
 
     var api = require('./routes/api')(dbs);
     app.use('/api', api);
 
     http.listen(process.env.PORT ||  serverConfig.port, (error, result) => {
       assert.equal(null, error);
-      debug(`  Listening on *:${(process.env.PORT ||  serverConfig.port)}`.green);
+      debug(`  Listening on *:${(process.env.PORT ||  serverConfig.port)}`);
       cb(null, null);
     })
   },
 
   function streamData(result, cb) {
-    debug('Data stream'.blue);
+    debug('Data stream');
 
     let stream = db.cappedJobs.stream(dbs);
 
@@ -79,24 +78,24 @@ require('async').waterfall([
     })
 
     stream.on('data', (result) => {
-      debug('  DATA!'.green);
+      debug('  DATA!');
       if (!result.action) {
         return;
       }
       if (result.action === 'working') {
-        debug(`  Start ${result.jobId}`.green);
+        debug(`  Start ${result.jobId}`);
         // Sends the job to clients in available queue
         jobsTools.emitJobAvailables(dbs, {
           _id: result.jobId,
           status: 'working'
         }, io, 1, false, (error, result) => {});
       } else {
-        debug(`  Stop ${result.jobId}`.green);
+        debug(`  Stop ${result.jobId}`);
         io.to(result.jobId).emit('stop', result.jobId);
       }
     });
 
-    debug('  Started'.green);
+    debug('  Started');
   }
 
 ], (error, result) => {

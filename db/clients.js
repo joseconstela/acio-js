@@ -1,6 +1,6 @@
 "use strict"
 
-let collection = 'Clients'
+const collection = 'Clients'
 
 /**
  * [description]
