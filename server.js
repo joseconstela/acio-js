@@ -56,11 +56,8 @@ require('async').waterfall([
 
   (result, cb) => {
     debug('Start server')
-
     app.use('/api', require('./routes/api')(dbs))
-    app.use('/', require('./routes/server')(dbs))
     app.use(express.static(__dirname + '/public'));
-
     http.listen(process.env.PORT || 3000, (error, result) => {
       assert.equal(null, error)
       debug(`  Listening on *:${(process.env.PORT || 3000)}`)
