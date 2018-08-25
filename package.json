@@ -3,8 +3,8 @@
   "version": "0.0.2",
   "description": "Open source JavaScript distributed computing system",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "mocha test"
   },
   "dependencies": {
