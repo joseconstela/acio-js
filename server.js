@@ -6,7 +6,6 @@ const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const assert = require('assert')
 const mongoClient = require('mongodb').MongoClient
-const MongoOplog = require('mongo-oplog')
 const mongoConfig = require('./config').get('/mongodb')
 const serverConfig = require('./config').get('/server')
 
