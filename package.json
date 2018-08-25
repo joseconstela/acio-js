@@ -10,7 +10,6 @@
   "dependencies": {
     "assert": "1.4.1",
     "async": "^2.6.1",
-    "confidence": "^3.0.2",
     "debug": "^3.1.0",
     "express": "^4.16.3",
     "lodash": "^4.17.10",

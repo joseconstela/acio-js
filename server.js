@@ -6,8 +6,6 @@ const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const assert = require('assert')
 const mongoClient = require('mongodb').MongoClient
-const mongoConfig = require('./config').get('/mongodb')
-const serverConfig = require('./config').get('/server')
 
 const db = require('./db/_db')
 const debug = require('debug')('acio')
@@ -20,15 +18,16 @@ debug('Acio-js');
 require('async').waterfall([
 
   function connectDb(cb) {
+    const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost'
     debug('Connecting to DB...');
     const attemps = 30;
     let attempsLeft = attemps;
     let connect = (_cb) => {
       debug(`  retry ${attempsLeft} of ${attemps}`);
       attempsLeft--;
-      mongoClient.connect(process.env.MONGO_URL ||  mongoConfig.url, (error, result) => {
+      mongoClient.connect(mongoUrl, (error, result) => {
         if (error) { return _cb(error, result); }
-        debug(`  connected to ${process.env.MONGO_URL || mongoConfig.url}`);
+        debug(`  connected to ${mongoUrl}`);
         dbs.mongo = result;
         _cb(null, null)
       });
@@ -59,9 +58,9 @@ require('async').waterfall([
     var api = require('./routes/api')(dbs);
     app.use('/api', api);
 
-    http.listen(process.env.PORT ||  serverConfig.port, (error, result) => {
+    http.listen(process.env.PORT || 3000, (error, result) => {
       assert.equal(null, error);
-      debug(`  Listening on *:${(process.env.PORT ||  serverConfig.port)}`);
+      debug(`  Listening on *:${(process.env.PORT || 3000)}`);
       cb(null, null);
     })
   },
