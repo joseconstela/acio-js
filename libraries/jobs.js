@@ -1,15 +1,15 @@
 "use strict"
 
-const db = require('../db/_db'),
-      defaultQuery = {status: 'working'},
-      projection = {
-    	    name: "$name",
-    	    code: "$function.code",
-    	    libraries: "$function.libraries",
-    	    env: "$env",
-    	    parameter: "$data.parameters"
+const db = require('../db')
+const defaultQuery = {status: 'working'}
+const projection = {
+      name: "$name",
+      code: "$function.code",
+      libraries: "$function.libraries",
+      env: "$env",
+      parameter: "$data.parameters"
 
-    	}
+  }
 
 /**
  * [description]

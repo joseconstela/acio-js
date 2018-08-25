@@ -1,7 +1,7 @@
 "use strict"
 
 let express = require('express'),
-    db = require('../db/_db')
+    db = require('../db')
 
 module.exports = (dbs) => {
 
