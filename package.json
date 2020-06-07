@@ -15,7 +15,7 @@
     "confidence": "3.0.1",
     "debug": "3.0.1",
     "express": "4.10.2",
-    "lodash": "4.17.4",
+    "lodash": "4.17.15",
     "mongo-oplog": "2.0.2",
     "mongodb": "2.1.18",
     "socket.io": "1.4.6",
