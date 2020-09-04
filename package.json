@@ -17,7 +17,7 @@
     "express": "4.10.2",
     "lodash": "4.17.4",
     "mongo-oplog": "2.0.2",
-    "mongodb": "2.1.18",
+    "mongodb": "3.6.1",
     "socket.io": "1.4.6",
     "uuid": "2.0.2"
   }
